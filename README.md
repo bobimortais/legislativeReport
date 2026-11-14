@@ -80,7 +80,7 @@ mvn clean package
 This compiles the code, runs the tests, and produces an executable jar in `target/`, for example:
 
 ```
-target/legislativeReport-1.0-SNAPSHOT.jar
+target/legislativeReport-1.0.jar
 ```
 
 The exact file name depends on the `artifactId` and `version` in `pom.xml`. To skip the tests during the build:

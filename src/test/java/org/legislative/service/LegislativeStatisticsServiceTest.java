@@ -7,9 +7,9 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class ReportServiceTest {
+class LegislativeStatisticsServiceTest {
 
-    final ReportService reportService = new ReportService();
+    final LegislativeStatisticsService legislativeStatisticsService = new LegislativeStatisticsService();
 
     @Test
     void getLegislatorsBillsVotes_shouldReturnListOfCountOfBillVotesPerLegislator() {
@@ -20,7 +20,7 @@ class ReportServiceTest {
         List<Person> legislators = List.of(new Person(1, "Rep. 1"), new Person(2, "Rep. 2"));
         List<VoteResult> listOfVoteResults = List.of(new VoteResult(1, 1, 1, 1), new VoteResult(2, 1, 3, 2),new VoteResult(3, 1, 6, 2), new VoteResult(4, 2, 2, 1), new VoteResult(5, 2, 4, 1), new VoteResult(6, 2, 5, 2));
 
-        List<VotedBillsPerLegislator> fetchedVotedBillsPerLegislator = reportService.getListOfBillVotesPerLegislator(legislators, listOfVoteResults);
+        List<VotedBillsPerLegislator> fetchedVotedBillsPerLegislator = legislativeStatisticsService.getListOfBillVotesPerLegislator(legislators, listOfVoteResults);
 
         assertEquals(expectedVotedBillsPerLegislators, fetchedVotedBillsPerLegislator);
     }
@@ -48,7 +48,7 @@ class ReportServiceTest {
 
         List<BillSupport> expectedListOfBillsSupport = List.of(bill1Support, bill2Support, bill3Support);
 
-        List<BillSupport> fetchedListOfBillsSupport = reportService.getListOfBillSupport(legislators, bills, listOfVotes, listOfVoteResults);
+        List<BillSupport> fetchedListOfBillsSupport = legislativeStatisticsService.getListOfBillSupport(legislators, bills, listOfVotes, listOfVoteResults);
 
         assertEquals(expectedListOfBillsSupport, fetchedListOfBillsSupport);
     }

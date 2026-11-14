@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class ReportService {
+public class LegislativeStatisticsService {
 
     public List<VotedBillsPerLegislator> getListOfBillVotesPerLegislator(List<Person> legislators, List<VoteResult> listOfVoteResults) {
         var votedBillsPerLegislators = new ArrayList<VotedBillsPerLegislator>();
@@ -16,10 +16,10 @@ public class ReportService {
             votedBillsPerLegislator.setLegislatorId(legislator.getId());
             votedBillsPerLegislator.setName(legislator.getName());
 
-            long supportedBills = listOfVoteResults.stream().filter(v -> v.getLegislatorId().equals(legislator.getId())).filter(v -> v.getVoteType().equals(1)).count();
-            long unsupportedBills = listOfVoteResults.stream().filter(v -> v.getLegislatorId().equals(legislator.getId())).filter(v -> v.getVoteType().equals(2)).count();
-            votedBillsPerLegislator.setNumberOfSupportedBills((int) supportedBills);
-            votedBillsPerLegislator.setNumberOfOpposedBills((int) unsupportedBills);
+            List<VoteResult> legislatorVoteResults = listOfVoteResults.stream().filter(v -> v.getLegislatorId().equals(legislator.getId())).toList();
+
+            votedBillsPerLegislator.setNumberOfSupportedBills((int) legislatorVoteResults.stream().filter(v -> v.getVoteType().equals(1)).count());
+            votedBillsPerLegislator.setNumberOfOpposedBills((int) legislatorVoteResults.stream().filter(v -> v.getVoteType().equals(2)).count());
 
             votedBillsPerLegislators.add(votedBillsPerLegislator);});
 
@@ -39,8 +39,8 @@ public class ReportService {
                     .ifPresentOrElse(
                             sponsor -> billSupport.primarySponsorName(sponsor.getName()),
                             () -> {
-                                System.out.println("Primary sponsor not found for bill " + bill.getId()
-                                        + " (sponsor id: " + bill.getPrimarySponsor() + ")");
+                                System.out.printf("Primary sponsor not found for bill %s (sponsor id: %s)%n",
+                                        bill.getId(), bill.getPrimarySponsor());
                                 billSupport.primarySponsorName("NOT_ON_FILE");
                             }
                     );
