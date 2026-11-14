@@ -38,8 +38,11 @@ public class ReportService {
                     .findFirst()
                     .ifPresentOrElse(
                             sponsor -> billSupport.primarySponsorName(sponsor.getName()),
-                            () -> System.out.println("Primary sponsor not found for bill " + bill.getId()
-                                    + " (sponsor id: " + bill.getPrimarySponsor() + ")")
+                            () -> {
+                                System.out.println("Primary sponsor not found for bill " + bill.getId()
+                                        + " (sponsor id: " + bill.getPrimarySponsor() + ")");
+                                billSupport.primarySponsorName("NOT_ON_FILE");
+                            }
                     );
 
             Set<Integer> listOfUniqueVotesForBill = listOfVotes.stream().filter(vote -> vote.getBillId().equals(bill.getId())).map(Vote::getId).collect(Collectors.toSet());;
