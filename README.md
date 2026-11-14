@@ -94,11 +94,11 @@ mvn clean package -DskipTests
 Run the jar and pass the four CSV files as arguments, in this order: `person`, `bills`, `votes`, `vote_results`.
 
 ```bash
-java -jar target/legislativeReport-1.0-SNAPSHOT.jar \
-  person.csv \
-  bills.csv \
-  votes.csv \
-  vote_results.csv
+java -jar target/legislativeReport-1.0.jar \
+legislators.csv \
+bills.csv \
+votes.csv \
+vote_results.csv
 ```
 
 On Windows (PowerShell), put it on one line:

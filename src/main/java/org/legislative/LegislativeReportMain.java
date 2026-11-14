@@ -33,6 +33,8 @@ public class LegislativeReportMain {
         List<Vote> votes = csvProcessor.read(inputs.get(2), Mappers::vote);
         List<VoteResult> voteResults = csvProcessor.read(inputs.get(3), Mappers::voteResult);
 
+        Files.createDirectories(Path.of("out"));
+
         try (Writer writer = Files.newBufferedWriter(Path.of("out/legislators-support-oppose-count.csv"))) {
             List<VotedBillsPerLegislator> votesPerLegislator = reportService.getListOfBillVotesPerLegislator(legislators, voteResults);
             csvProcessor.write(writer, votesPerLegislator, Mappers.VOTED_BILLS_PER_LEGISLATOR_HEADER, Mappers::voteBillsPerLegislator);
