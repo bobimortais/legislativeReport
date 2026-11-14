@@ -1,14 +1,12 @@
 package org.legislative.processor;
 
 import org.junit.jupiter.api.Test;
-import org.legislative.entity.Bill;
-import org.legislative.entity.Person;
-import org.legislative.entity.Vote;
-import org.legislative.entity.VoteResult;
+import org.legislative.entity.*;
 
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
+import java.io.StringWriter;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -81,5 +79,43 @@ class CsvProcessorTest {
         List<VoteResult> fetchedVoteResultList = csvProcessor.read(reader, Mappers::voteResult);
 
         assertEquals(expectedVoteResultList, fetchedVoteResultList);
+    }
+
+    @Test
+    void write_shouldWriteVotedBillsPerLegislatorToFile() throws IOException {
+        VotedBillsPerLegislator votedBillsPerLegislator1 = new VotedBillsPerLegislator(1, "Rep. 1", 1, 2);
+        VotedBillsPerLegislator votedBillsPerLegislator2 = new VotedBillsPerLegislator(2, "Rep. 2", 2, 1);
+        VotedBillsPerLegislator votedBillsPerLegislator3 = new VotedBillsPerLegislator(3, "Rep. 3", 5, 3);
+
+        List<VotedBillsPerLegislator> votedBillsPerLegislators = List.of(votedBillsPerLegislator1, votedBillsPerLegislator2, votedBillsPerLegislator3);
+
+        StringWriter out = new StringWriter();
+        csvProcessor.write(out, votedBillsPerLegislators, Mappers.VOTED_BILLS_PER_LEGISLATOR_HEADER, Mappers::voteBillsPerLegislator);
+
+        assertEquals("""
+            id,name,num_supported_bills,num_opposed_bills
+            1,Rep. 1,1,2
+            2,Rep. 2,2,1
+            3,Rep. 3,5,3
+            """, out.toString());
+    }
+
+    @Test
+    void write_shouldWriteBillsSupportToFile() throws IOException {
+        BillSupport billSupport1 = BillSupport.builder().id(1).title("bill1").supporterCount(2).opposerCount(1).primarySponsorName("Rep. 1").build();
+        BillSupport billSupport2 = BillSupport.builder().id(2).title("bill2").supporterCount(0).opposerCount(3).primarySponsorName("Rep. 2").build();
+        BillSupport billSupport3 = BillSupport.builder().id(3).title("bill3").supporterCount(2).opposerCount(5).primarySponsorName("Rep. 3").build();
+
+        List<BillSupport> billsSupport = List.of(billSupport1, billSupport2, billSupport3);
+
+        StringWriter out = new StringWriter();
+        csvProcessor.write(out, billsSupport, Mappers.BILLS_SUPPORT_HEADER, Mappers::billSupport);
+
+        assertEquals("""
+            id,title,supporter_count,opposer_count,primary_sponsor
+            1,bill1,2,1,Rep. 1
+            2,bill2,0,3,Rep. 2
+            3,bill3,2,5,Rep. 3
+            """, out.toString());
     }
 }
