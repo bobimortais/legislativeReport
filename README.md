@@ -104,13 +104,13 @@ vote_results.csv
 On Windows (PowerShell), put it on one line:
 
 ```powershell
-java -jar target\legislativeReport-1.0-SNAPSHOT.jar person.csv bills.csv votes.csv vote_results.csv
+java -jar target\legislativeReport-1.0.jar person.csv bills.csv votes.csv vote_results.csv
 ```
 
 You can pass full or relative paths. If a path contains spaces, wrap it in quotes:
 
 ```bash
-java -jar target/legislativeReport-1.0-SNAPSHOT.jar "data/person.csv" "data/bills.csv" "data/votes.csv" "data/vote_results.csv"
+java -jar target/legislativeReport-1.0.jar "data/person.csv" "data/bills.csv" "data/votes.csv" "data/vote_results.csv"
 ```
 
 When it finishes, the reports are available at:
