@@ -3,12 +3,12 @@ package org.legislative.processor;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 import org.apache.commons.csv.CSVRecord;
-import org.legislative.entity.VotedBillsPerLegislator;
 
 import java.io.IOException;
 import java.io.Reader;
-import java.io.StringWriter;
 import java.io.Writer;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
@@ -30,6 +30,12 @@ public class CsvProcessor {
             result.add(mapper.apply(record));
         }
         return result;
+    }
+
+    public <T> List<T> read(Path path, Function<CSVRecord, T> mapper) throws IOException {
+        try (Reader reader = Files.newBufferedReader(path)) {
+            return read(reader, mapper);
+        }
     }
 
     public <T> void write(Writer writer, List<T> items, List<String> header, Function<T, List<?>> rowMapper) throws IOException {

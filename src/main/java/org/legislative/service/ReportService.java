@@ -33,7 +33,14 @@ public class ReportService {
             var billSupport = BillSupport.builder();
             billSupport.title(bill.getTitle());
             billSupport.id(bill.getId());
-            billSupport.primarySponsorName(legislators.stream().filter(l -> l.getId().equals(bill.getPrimarySponsor())).findFirst().get().getName());
+            legislators.stream()
+                    .filter(l -> l.getId().equals(bill.getPrimarySponsor()))
+                    .findFirst()
+                    .ifPresentOrElse(
+                            sponsor -> billSupport.primarySponsorName(sponsor.getName()),
+                            () -> System.out.println("Primary sponsor not found for bill " + bill.getId()
+                                    + " (sponsor id: " + bill.getPrimarySponsor() + ")")
+                    );
 
             Set<Integer> listOfUniqueVotesForBill = listOfVotes.stream().filter(vote -> vote.getBillId().equals(bill.getId())).map(Vote::getId).collect(Collectors.toSet());;
             long billSupporterCount = listOfVoteResults.stream().filter(voteResult -> listOfUniqueVotesForBill.contains(voteResult.getVoteId()) && voteResult.getVoteType().equals(1)).count();
