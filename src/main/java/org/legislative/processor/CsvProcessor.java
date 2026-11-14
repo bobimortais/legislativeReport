@@ -3,6 +3,7 @@ package org.legislative.processor;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 import org.apache.commons.csv.CSVRecord;
+import org.legislative.exception.MalformedInputFileException;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -27,7 +28,11 @@ public class CsvProcessor {
     public <T> List<T> read(Reader reader, Function<CSVRecord, T> mapper) throws IOException {
         List<T> result = new ArrayList<>();
         for (CSVRecord entryRecord : READ_FORMAT.parse(reader)) {
-            result.add(mapper.apply(entryRecord));
+            try {
+                result.add(mapper.apply(entryRecord));
+            } catch (IllegalArgumentException e) {
+                throw new MalformedInputFileException();
+            }
         }
         return result;
     }

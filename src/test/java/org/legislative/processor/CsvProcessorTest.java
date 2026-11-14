@@ -1,7 +1,9 @@
 package org.legislative.processor;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.legislative.entity.*;
+import org.legislative.exception.MalformedInputFileException;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -25,6 +27,16 @@ class CsvProcessorTest {
         List<Person> fetchedPersonList = csvProcessor.read(reader, Mappers::person);
 
         assertEquals(expectedPersonList, fetchedPersonList);
+    }
+
+    @Test
+    void read_shouldThrowExceptionForMalformedInputFile() {
+        Reader reader = new StringReader("""
+            id
+            1,Jane
+            2,Doe
+            """);
+        Assertions.assertThrows(MalformedInputFileException.class, () -> csvProcessor.read(reader, Mappers::person));
     }
 
     @Test
@@ -118,4 +130,5 @@ class CsvProcessorTest {
             3,bill3,2,5,Rep. 3
             """, out.toString());
     }
+
 }
