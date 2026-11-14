@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class ReportServiceTest {
 
-    ReportService reportService = new ReportService();
+    final ReportService reportService = new ReportService();
 
     @Test
     void getLegislatorsBillsVotes_shouldReturnListOfCountOfBillVotesPerLegislator() {

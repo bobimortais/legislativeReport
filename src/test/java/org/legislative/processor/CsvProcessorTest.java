@@ -12,7 +12,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class CsvProcessorTest {
-    CsvProcessor csvProcessor = new CsvProcessor();
+    final CsvProcessor csvProcessor = new CsvProcessor();
 
     @Test
     void read_shouldReadCSVAndReturnPersonList() throws IOException {

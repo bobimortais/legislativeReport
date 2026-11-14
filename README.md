@@ -26,12 +26,12 @@ Built with **Java 21** and **Maven**.
 
 The jar expects exactly **four** CSV files, passed in this order:
 
-| # | File          | Description                                  |
-|---|---------------|----------------------------------------------|
-| 1 | `person`        | Legislator data                              |
-| 2 | `bills`         | Bills that were created                      |
-| 3 | `votes`         | Votes cast for each bill                     |
-| 4 | `vote_results`  | Result of each vote, per bill                |
+| # | File           | Description                   | Headers                                   |
+|---|----------------|-------------------------------|-------------------------------------------|
+| 1 | `person`       | Legislator data               | `id`, `name`                              |
+| 2 | `bills`        | Bills that were created       | `id`, `title`, `sponsor_id`               |
+| 3 | `votes`        | Votes cast for each bill      | `id`, `bill_id`                           |
+| 4 | `vote_results` | Result of each vote, per bill | `id`, `legislator_id`, `vote_id`, `vote_type` |
 
 Each file must be a valid CSV with a header row. Quoted values containing commas (for example `"Silva, Ana"`) are supported.
 
@@ -133,6 +133,6 @@ mvn test
 | `UnsupportedClassVersionError` | You are running with a Java version older than 21. Check `java -version`. |
 | `no main manifest attribute` | The jar was not built as an executable jar. Rebuild with `mvn clean package` and confirm the `Main-Class` is configured in `pom.xml`. |
 | `NoClassDefFoundError: org/apache/commons/csv/...` | The dependencies were not bundled into the jar. Use the shaded jar produced by `mvn clean package`. |
-| `Expected 4 file paths but got N` | Pass exactly four CSV files. |
+| `There are missing arguments for the execution` | Pass exactly four CSV files. |
 | `File not found: ...` | Check the path. Relative paths are resolved from the directory where you run the command. |
 | `NoSuchFileException` for the output file | Run from a directory where you have write permission so `out/` can be created. |

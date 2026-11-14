@@ -18,8 +18,8 @@ public class ReportService {
 
             long supportedBills = listOfVoteResults.stream().filter(v -> v.getLegislatorId().equals(legislator.getId())).filter(v -> v.getVoteType().equals(1)).count();
             long unsupportedBills = listOfVoteResults.stream().filter(v -> v.getLegislatorId().equals(legislator.getId())).filter(v -> v.getVoteType().equals(2)).count();
-            votedBillsPerLegislator.setNumberOfSupportedBills(Long.valueOf(supportedBills).intValue());
-            votedBillsPerLegislator.setNumberOfOpposedBills(Long.valueOf(unsupportedBills).intValue());
+            votedBillsPerLegislator.setNumberOfSupportedBills((int) supportedBills);
+            votedBillsPerLegislator.setNumberOfOpposedBills((int) unsupportedBills);
 
             votedBillsPerLegislators.add(votedBillsPerLegislator);});
 
@@ -45,12 +45,12 @@ public class ReportService {
                             }
                     );
 
-            Set<Integer> listOfUniqueVotesForBill = listOfVotes.stream().filter(vote -> vote.getBillId().equals(bill.getId())).map(Vote::getId).collect(Collectors.toSet());;
+            Set<Integer> listOfUniqueVotesForBill = listOfVotes.stream().filter(vote -> vote.getBillId().equals(bill.getId())).map(Vote::getId).collect(Collectors.toSet());
             long billSupporterCount = listOfVoteResults.stream().filter(voteResult -> listOfUniqueVotesForBill.contains(voteResult.getVoteId()) && voteResult.getVoteType().equals(1)).count();
             long billOpposerCount = listOfVoteResults.stream().filter(voteResult -> listOfUniqueVotesForBill.contains(voteResult.getVoteId()) && voteResult.getVoteType().equals(2)).count();
 
-            billSupport.supporterCount(Long.valueOf(billSupporterCount).intValue());
-            billSupport.opposerCount(Long.valueOf(billOpposerCount).intValue());
+            billSupport.supporterCount((int) billSupporterCount);
+            billSupport.opposerCount((int) billOpposerCount);
 
             billSupportList.add(billSupport.build());
         });

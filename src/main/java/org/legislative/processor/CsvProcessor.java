@@ -26,8 +26,8 @@ public class CsvProcessor {
 
     public <T> List<T> read(Reader reader, Function<CSVRecord, T> mapper) throws IOException {
         List<T> result = new ArrayList<>();
-        for (CSVRecord record : READ_FORMAT.parse(reader)) {
-            result.add(mapper.apply(record));
+        for (CSVRecord entryRecord : READ_FORMAT.parse(reader)) {
+            result.add(mapper.apply(entryRecord));
         }
         return result;
     }

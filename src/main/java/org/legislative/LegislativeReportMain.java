@@ -1,6 +1,7 @@
 package org.legislative;
 
 import org.legislative.entity.*;
+import org.legislative.exception.MissingInputArgumentException;
 import org.legislative.processor.CsvProcessor;
 import org.legislative.processor.Mappers;
 import org.legislative.service.ReportService;
@@ -18,21 +19,28 @@ public class LegislativeReportMain {
         try {
             run(args);
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println("There was an issue while generating the reports. Please refer to README.md for troubleshooting.");
         }
     }
 
     static void run(String[] args) throws IOException {
+        if(args.length != 4) {
+            throw new MissingInputArgumentException();
+        }
+
         CsvProcessor csvProcessor = new CsvProcessor();
         ReportService reportService = new ReportService();
         List<Path> inputs = Arrays.stream(args).map(Path::of).toList();
-
 
         List<Person> legislators = csvProcessor.read(inputs.get(0), Mappers::person);
         List<Bill> bills = csvProcessor.read(inputs.get(1), Mappers::bill);
         List<Vote> votes = csvProcessor.read(inputs.get(2), Mappers::vote);
         List<VoteResult> voteResults = csvProcessor.read(inputs.get(3), Mappers::voteResult);
 
+        generateReports(reportService, legislators, voteResults, csvProcessor, bills, votes);
+    }
+
+    private static void generateReports(ReportService reportService, List<Person> legislators, List<VoteResult> voteResults, CsvProcessor csvProcessor, List<Bill> bills, List<Vote> votes) throws IOException {
         Files.createDirectories(Path.of("out"));
 
         try (Writer writer = Files.newBufferedWriter(Path.of("out/legislators-support-oppose-count.csv"))) {

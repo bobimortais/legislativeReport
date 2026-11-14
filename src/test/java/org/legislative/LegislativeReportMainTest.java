@@ -1,9 +1,7 @@
 package org.legislative;
 
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
+import org.legislative.exception.MissingInputArgumentException;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -105,4 +103,8 @@ class LegislativeReportMainTest {
         """, actual);
     }
 
+    @Test
+    void main_shouldThrowExeceptionWhenArgumentListHasMissingParameters() {
+        Assertions.assertThrows(MissingInputArgumentException.class, () -> LegislativeReportMain.run(new String[]{"arg1","arg2","arg3"}));
+    }
 }
